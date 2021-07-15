@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: white;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        main {
+            background-color: white;
+            width: 80%;
+            height: 80%;
+            box-shadow: 0px 0px 30px -9px rgba(13, 9, 9, 0.63);
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        #main_section {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .about_me {
+            margin-left: 40px;
+            flex: 0.5;
+        }
+        #repo_list {
+            list-style-type: square;
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        #profileImage {
+            height: 200px;
+            width: 200px;
+            border-radius: 100px;
+            margin: auto;
+        }
+
+        .details {
+            flex: 0.5;
+            margin-left: 50px;
+        }
+        .detail_list {
+            padding: 5px;
+        }
+
+        #to_follow {
+            display: flex;
+            flex-direction: column;
+            margin-top: 40px;
+        }
+        .follow_list {
+            display: flex;
+            flex-direction: column;
+            padding-left: 50px;
+        }
+        .follow_list > a {
+            text-decoration: none;
+            padding: 3px;
+        }
+    </style>
+</head>
+
+<body>
+<main>
+    <header>
+        <h1>Profile</h1>
+        <p>I am on the way of learning</p>
+    </header>
+
+    <div id="main_section">
+        <div class="about_me">
+            <h3>My Projects</h3>
+            <ul id="repo_list"></ul>
+        </div>
+
+        <img id="profileImage" />
+        <div class="details">
+            <p class="detail_list">
+                <span>Name :</span>
+                <span class="name"></span>
+            </p>
+            <p class="detail_list">
+                <span>Bio :</span>
+                <span class="bio"></span>
+            </p>
+            <p class="detail_list">
+                <span>Public Repos :</span>
+                <span class="repos"></span>
+            </p>
+            <p class="detail_list">
+                <span>Following :</span>
+                <span class="follow"></span>
+            </p>
+            <p class="detail_list">
+                <span>Follower :</span>
+                <span class="follower"></span>
+            </p>
+            <p class="detail_list">
+                <span>Location :</span>
+                <span class="location"></span>
+            </p>
+
+            <div id="to_follow">
+                <p>Follow me on :</p>
+                <p class="follow_list">
+                    <a id="githubLink">GitHub</a>
+                    <a href="#">Instagram</a>
+
+                </p>
+            </div>
+
+        </div>
+    </div>
+</main>
+</body>
+
+<script>
+    fetch("https://api.github.com/users/gayatri195/repos")
+        .then((response) => response.json())
+        .then((data) => {
+            const temp = [...data];
+            const result = data.map((temp) => {
+                return temp.name;
+            });
+            result.forEach((element) => {
+                var node = document.createElement("li");
+                node.appendChild(document.createTextNode(element));
+                document.querySelector("#repo_list").appendChild(node);
+            });
+        });
+
+    fetch("https://api.github.com/users/gayatri195")
+        .then((response) => response.json())
+        .then(function (data) {
+            document.querySelector("#profileImage").src = data['avatar_url'];
+            document.querySelector(".name").textContent = data.name;
+            document.querySelector(".bio").textContent = data.bio;
+            document.querySelector(".repos").textContent = data.public_repos;
+            document.querySelector(".follow").textContent = data.following;
+            document.querySelector(".follower").textContent = data.followers;
+            document.querySelector(".location").textContent = data.location;
+            document.getElementById('githubLink').href = data['html_url'];
+        });
+</script>
+</html>
